@@ -1,5 +1,9 @@
 # hiwwwww
 
+### REQUIRE
+- npm
+- mongodb
+
 ### Features
 - [ ] Login via facebook
 - [ ] Login via email
