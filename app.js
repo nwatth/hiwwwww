@@ -1,7 +1,23 @@
-var express = require('express');
-var path = require('path');
-var logger = require('morgan');
+"use strict";
+
+// ============================================================== //
+//                         DEPENDENCIES                           //
+// ============================================================== //
+
+var express    = require('express');
+var Resource   = require('express-resource');
+var logger     = require('morgan');
 var bodyParser = require('body-parser');
+
+// register models
+var Cart = require('./models/cart');
+
+// register controllers
+var CartController = require('./controllers/cartController');
+
+// ============================================================== //
+//                         APP CONFIGURE                          //
+// ============================================================== //
 
 var app = express();
 
@@ -9,8 +25,11 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// routes
-// ...
+// ============================================================== //
+//                            ROUTES                              //
+// ============================================================== //
+
+app.resource('carts', new CartController());
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -19,7 +38,9 @@ app.use(function(req, res, next) {
   next(err);
 });
 
-// error handlers
+// ============================================================== //
+//                        ERROR HANDLERS                          //
+// ============================================================== //
 
 // development error handler
 // will print stacktrace
