@@ -5,9 +5,14 @@ var CartSchema = new Schema({
   name: String,
   state: {
     type: String,
-    match: /(wait|buy|paid)/
+    match: /(draft|request|search|paid|done|archive)/,
+    default: 'draft'
   },
-  updated: {
+  created_at: {
+    type: Date,
+    default: Date.now
+  },
+  updated_at: {
     type: Date,
     default: Date.now
   }
