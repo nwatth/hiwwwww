@@ -8,12 +8,15 @@ var express    = require('express');
 var Resource   = require('express-resource');
 var logger     = require('morgan');
 var bodyParser = require('body-parser');
+var mongoose   = require('mongoose');
+
+mongoose.connect('mongodb://localhost/test');
 
 // register models
-var Cart = require('./models/cart');
+var Cart = require('./models/cart') && mongoose.model('Cart');
 
 // register controllers
-var CartController = require('./controllers/cartController');
+var CartController = require('./controllers/carts_controller');
 
 // ============================================================== //
 //                         APP CONFIGURE                          //
@@ -24,6 +27,7 @@ var app = express();
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.disable('etag');
 
 // ============================================================== //
 //                            ROUTES                              //
@@ -42,27 +46,13 @@ app.use(function(req, res, next) {
 //                        ERROR HANDLERS                          //
 // ============================================================== //
 
-// development error handler
-// will print stacktrace
-if (app.get('env') === 'development') {
-  app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-    res.send('error', {
+app.use(function(err, req, res, next) {
+  res
+    .status(err.status || 500)
+    .send({
       message: err.message,
       error: err
     });
-    return;
-  });
-}
-
-// production error handler
-// no stacktraces leaked to user
-app.use(function(err, req, res, next) {
-  res.status(err.status || 500);
-  res.send('error', {
-    message: err.message,
-    error: {}
-  });
   return;
 });
 
