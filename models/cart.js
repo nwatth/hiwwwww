@@ -18,4 +18,16 @@ var CartSchema = new Schema({
   }
 });
 
+CartSchema.pre('save', function(next) {
+  this.updated_at = new Date();
+  next();
+});
+
+CartSchema.options.toObject = CartSchema.options.toObject || {};
+CartSchema.options.toObject.transform = function (doc, ret, options) {
+  ret.id = ret._id;
+  delete ret._id;
+  delete ret.__v;
+};
+
 module.export = mongoose.model('Cart', CartSchema);
