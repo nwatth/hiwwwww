@@ -5,18 +5,11 @@
 // ============================================================== //
 
 var express    = require('express');
-var Resource   = require('express-resource');
 var logger     = require('morgan');
 var bodyParser = require('body-parser');
-var mongoose   = require('mongoose');
-
-mongoose.connect('mongodb://localhost/test');
-
-// register models
-var Cart = require('./models/cart') && mongoose.model('Cart');
-
-// register controllers
-var CartController = require('./controllers/carts_controller');
+var register   = require('./configs/register');
+var routes     = require('./configs/routes');
+var middleware = require('./configs/middleware');
 
 // ============================================================== //
 //                         APP CONFIGURE                          //
@@ -33,7 +26,8 @@ app.disable('etag');
 //                            ROUTES                              //
 // ============================================================== //
 
-app.resource('carts', new CartController());
+app.use(middleware);
+app.use(routes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
