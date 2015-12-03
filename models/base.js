@@ -13,14 +13,21 @@ var BaseSchema = function () {
     updated_at: {
       type: Date,
       default: Date.now
+    },
+    deleted_at: {
+      type: Date,
+      default: null
     }
   });
 
   this.options.toObject = this.options.toObject || {};
   this.options.toObject.transform = function (self, ret, options) {
-    ret.id = ret._id;
-    delete ret._id;
     delete ret.__v;
+    delete ret.deleted_at;
+  };
+
+  this.methods.prepare = function (field, request, default_value) {
+    this[field] = request[field] || this[field] || default_value || null;
   };
 
 };

@@ -1,34 +1,55 @@
 var Cart = require('../models/cart');
 
-function CartController() {};
+var CartController = {};
 
 CartController.index = function (req, res) {
-  Cart.find({}, function (error, carts) {
-    res.json(Object.keys(carts).map(function (key) {
-      return carts[key].toObject();
-    }));
+  Cart.find({'deleted_at': null}, function (error, carts) {
+    var carts = carts.map(function (cart) {
+      return cart.toObject();
+    });
+    res.json(carts);
   });
 };
 
 CartController.show = function (req, res) {
-  res.json(req.cart);
+  Cart.findOne({'_id': req.params.id, 'deleted_at': null}, function (err, cart) {
+    try {
+      if (err) throw err;
+      res.json(cart.toObject());
+    } catch(err) {
+      res.json({});
+    };
+  });
 };
 
 CartController.create = function (req, res) {
-  Cart.create(req.body, function(error, data) {
-    res.json({success: true});
+  var cart = new Cart();
+  var now  = Date.now();
+  cart.prepare('name', req.body, 'My cart');
+  cart.created_at = now;
+  cart.updated_at = now;
+  cart.save(function (err) {
+    res.json({success: !err});
   });
 };
 
 CartController.update = function (req, res) {
-  Cart.findByIdAndUpdate(req.params.cart, req.body, function (error) {
-    res.json({success: true});
+  Cart.findOne({'_id': req.params.id}, function (err, cart) {
+    cart.prepare('name', req.body);
+    cart.prepare('state', req.body);
+    cart.updated_at = Date.now();
+    cart.save(function (err) {
+      res.json({success: !err});
+    });
   });
 };
 
 CartController.destroy = function (req, res) {
-  Cart.findByIdAndRemove(req.params.cart, function (error) {
-    res.json({success: true});
+  Cart.findOne({'_id': req.params.id}, function (err, cart) {
+    cart.deleted_at = Date.now();
+    cart.save(function (err) {
+      res.json({success: !err});
+    });
   });
 };
 

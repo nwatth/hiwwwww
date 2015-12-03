@@ -5,7 +5,7 @@ var CartSchema = new Schema({
   name: String,
   state: {
     type: String,
-    match: /(draft|request|search|paid|done|archive)/,
+    match: /^(draft|request|search|paid|done|archive)$/,
     default: 'draft'
   }
 });
