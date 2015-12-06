@@ -26,8 +26,8 @@ app.disable('etag');
 //                            ROUTES                              //
 // ============================================================== //
 
-app.use(middleware);
-app.use(routes);
+app.use('/api', middleware);
+app.use('/api', routes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
