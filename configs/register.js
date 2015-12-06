@@ -1,3 +1,5 @@
+"use strict";
+
 var Cart = require('../models/cart');
 
 var register = {};

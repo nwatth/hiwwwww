@@ -1,3 +1,5 @@
+"use strict";
+
 var database = require('../configs/database');
 var util     = require('util');
 var Schema   = database.Schema;

@@ -1,3 +1,5 @@
+"use strict";
+
 var database = require('../configs/database');
 var Schema   = require('./base');
 
