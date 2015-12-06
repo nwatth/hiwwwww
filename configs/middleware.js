@@ -3,7 +3,7 @@
 var express    = require('express');
 var middleware = express.Router();
 
-var Cart     = require('../models/cart');
+var Cart = require('../models/cart');
 
 /* not used now.
 middleware.use('/carts/:id?', function (req, res, next) {
