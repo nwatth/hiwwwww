@@ -5,7 +5,7 @@ var Cart = require('../models/cart');
 var CartController = {};
 
 CartController.index = function (req, res) {
-  Cart.find({'deleted_at': null}, function (error, carts) {
+  Cart.find({'deleted_at': null}, function (err, carts) {
     var carts = carts.map(function (cart) {
       return cart.toObject();
     });
@@ -15,12 +15,14 @@ CartController.index = function (req, res) {
 
 CartController.show = function (req, res) {
   Cart.findOne({'_id': req.params.id, 'deleted_at': null}, function (err, cart) {
-    try {
-      if (err) throw err;
-      res.json(cart.toObject());
-    } catch(err) {
-      res.json({});
-    };
+    if (err) return res
+      .status(500)
+      .json({
+        status: 500,
+        message: err.message
+      });
+
+    res.json(cart.toObject());
   });
 };
 
@@ -38,7 +40,6 @@ CartController.create = function (req, res) {
 CartController.update = function (req, res) {
   Cart.findOne({'_id': req.params.id}, function (err, cart) {
     cart.prepare('name', req.body);
-    cart.prepare('state', req.body);
     cart.updated_at = Date.now();
     cart.save(function (err) {
       res.json({success: !err});
