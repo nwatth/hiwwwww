@@ -15,15 +15,15 @@ var CartSchema = new Schema({
 });
 
 CartSchema.methods.nextState = function () {
-  var state   = this.state;
-  var current = states.indexOf(state);
+  var current = states.indexOf(this.state);
   var next    = current + 1;
 
   if (~current && !!states[next]) {
     this.state = states[next];
     this.save();
-    return this.state;
   };
+
+  return this.state;
 };
 
 module.exports = database.model('Cart', CartSchema);
